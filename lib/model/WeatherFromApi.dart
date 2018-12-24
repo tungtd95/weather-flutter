@@ -34,11 +34,11 @@ class WeatherFromApi {
 }
 
 class Main {
-  int temp;
-  int pressure;
-  int humidity;
-  int tempMin;
-  int tempMax;
+  num temp;
+  num pressure;
+  num humidity;
+  num tempMin;
+  num tempMax;
 
   Main(this.temp, this.pressure, this.humidity, this.tempMin, this.tempMax);
 
