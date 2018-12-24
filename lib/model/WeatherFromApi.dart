@@ -6,6 +6,18 @@ class WeatherFromApi {
   Main main;
   List<WeatherData> weathers;
 
+  WeatherFromApi({this.id, this.name, this.main});
+
+  WeatherFromApi.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    name = json['name'];
+    main = Main.fromJson(json['main']);
+    weathers = [];
+    for (var value in json['weather']) {
+      weathers.add(WeatherData.fromJson(value));
+    }
+  }
+
   Weather toWeather() {
     return Weather(
         id,
@@ -22,13 +34,21 @@ class WeatherFromApi {
 }
 
 class Main {
-  double temp;
-  double pressure;
-  double humidity;
-  double tempMin;
-  double tempMax;
+  int temp;
+  int pressure;
+  int humidity;
+  int tempMin;
+  int tempMax;
 
   Main(this.temp, this.pressure, this.humidity, this.tempMin, this.tempMax);
+
+  Main.fromJson(Map<String, dynamic> json) {
+    temp = json['temp'];
+    pressure = json['pressure'];
+    humidity = json['humidity'];
+    tempMin = json['temp_min'];
+    tempMax = json['temp_max'];
+  }
 }
 
 class WeatherData {
@@ -36,4 +56,9 @@ class WeatherData {
   String description;
 
   WeatherData(this.main, this.description);
+
+  WeatherData.fromJson(Map<String, dynamic> json) {
+    main = json['main'];
+    description = json['description'];
+  }
 }

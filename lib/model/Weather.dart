@@ -3,11 +3,11 @@ class Weather {
   String location;
   String main;
   String des;
-  double temp;
-  double pressure;
-  double humidity;
-  double tempMin;
-  double tempMax;
+  int temp;
+  int pressure;
+  int humidity;
+  int tempMin;
+  int tempMax;
   int lastUpdated;
 
   Weather(this.id, this.location, this.main, this.des, this.temp, this.pressure,
