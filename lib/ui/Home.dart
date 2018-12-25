@@ -15,10 +15,10 @@ class HomeState extends State<Home> {
   WeatherRepo weatherRepo = WeatherRepoImpl();
   Weather weather;
   bool isLoading = false;
+  List<Weather> weathers = [];
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getWeathers();
   }
@@ -50,7 +50,16 @@ class HomeState extends State<Home> {
               "history",
               style: TextStyle(fontStyle: FontStyle.italic),
             ),
-          )
+          ),
+          Container(
+              height: 370,
+              margin: EdgeInsets.only(left: 20, right: 20),
+              padding: EdgeInsets.only(top: 0),
+              child: ListView.separated(
+                  separatorBuilder: (context, index) =>
+                      Divider(height: 1, color: Colors.black54),
+                  itemCount: weathers.length,
+                  itemBuilder: (context, index) => buildItem(weathers[index])))
         ],
       ),
     );
@@ -91,6 +100,65 @@ class HomeState extends State<Home> {
     }
   }
 
+  Widget buildItem(Weather weather) {
+    var dateTime = DateTime.fromMillisecondsSinceEpoch(weather.lastUpdated);
+    return GestureDetector(
+      onTap: () {
+        //TODO: navigate to weather detail screen
+      },
+      child: Container(
+          height: 60,
+          padding: EdgeInsets.all(10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                width: 110,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      weather.location,
+                      style: TextStyle(color: Colors.black, fontSize: 14),
+                    ),
+                    Text(
+                      weather.main,
+                      style: TextStyle(fontSize: 12),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                width: 144,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: <Widget>[
+                    Text("${weather.temp.toInt()}°C"),
+                    Text(
+                      "Last updated ${dateTime.day}/${dateTime.month}/"
+                          "${dateTime.year} ${dateTime.hour}:"
+                          "${dateTime.minute ~/ 10 == 0 ? "0${dateTime.minute}" : dateTime.minute}",
+                      style: TextStyle(fontSize: 10),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                width: 30,
+                child: IconButton(
+                    icon: Icon(
+                      Icons.remove_circle,
+                      color: Colors.redAccent,
+                    ),
+                    onPressed: () {
+                      removeWeather(weather);
+                    }),
+              ),
+            ],
+          )),
+    );
+  }
+
   void getWeatherByName(String name) async {
     setState(() {
       isLoading = true;
@@ -106,6 +174,13 @@ class HomeState extends State<Home> {
 
   void getWeathers() async {
     var weathers = await weatherRepo.getWeathers();
-    print("weathers size = ${weathers.length}");
+    setState(() {
+      this.weathers = weathers;
+    });
+  }
+
+  void removeWeather(Weather weather) async {
+    await weatherRepo.removeWeather(weather);
+    getWeathers();
   }
 }

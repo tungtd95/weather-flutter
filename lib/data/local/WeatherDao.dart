@@ -69,7 +69,8 @@ class WeatherDao {
   Future<List<Weather>> getWeathers() async {
     Database db = await open();
 
-    List<Map<String, dynamic>> results = await db.query(tableName);
+    List<Map<String, dynamic>> results =
+        await db.query(tableName, orderBy: "$lastUpdated DESC");
     List<Weather> weathers = [];
     for (Map<String, dynamic> result in results) {
       weathers.add(getWeatherFromRaw(result));
