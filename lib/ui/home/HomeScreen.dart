@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:weather_flutter/data/WeatherRepoImpl.dart';
 import 'package:weather_flutter/model/Weather.dart';
-import 'package:weather_flutter/repo/WeatherRepo.dart';
 import 'package:material_search/material_search.dart';
+import 'package:weather_flutter/ui/base/BaseView.dart';
+import 'package:weather_flutter/ui/home/HomePresenter.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -11,16 +11,14 @@ class Home extends StatefulWidget {
   }
 }
 
-class HomeState extends State<Home> {
-  WeatherRepo weatherRepo = WeatherRepoImpl();
-  Weather weather;
-  bool isLoading = false;
-  List<Weather> weathers = [];
+class HomeState extends BaseView {
+  HomePresenter homePresenter;
 
   @override
   void initState() {
     super.initState();
-    getWeathers();
+    homePresenter = HomePresenter(this);
+    homePresenter.updateWeathers();
   }
 
   @override
@@ -36,7 +34,7 @@ class HomeState extends State<Home> {
                 placeholder: "Enter location",
                 results: [],
                 onSubmit: (String value) {
-                  getWeatherByName(value);
+                  homePresenter.getWeatherByLocation(value);
                 },
               )),
           Container(
@@ -58,15 +56,16 @@ class HomeState extends State<Home> {
               child: ListView.separated(
                   separatorBuilder: (context, index) =>
                       Divider(height: 1, color: Colors.black54),
-                  itemCount: weathers.length,
-                  itemBuilder: (context, index) => buildItem(weathers[index])))
+                  itemCount: homePresenter.weathers.length,
+                  itemBuilder: (context, index) =>
+                      buildItem(homePresenter.weathers[index])))
         ],
       ),
     );
   }
 
   Container displayResult() {
-    if (weather == null) {
+    if (homePresenter.weather == null) {
       return Container(
           height: 60,
           width: 260,
@@ -80,14 +79,14 @@ class HomeState extends State<Home> {
           padding: EdgeInsets.only(top: 20, bottom: 20, left: 20),
           decoration: BoxDecoration(color: Colors.black12),
           child: Text(
-            weather?.location,
+            homePresenter.weather?.location,
             style: TextStyle(fontSize: 18),
           ));
     }
   }
 
   Container displayLoading() {
-    if (isLoading) {
+    if (homePresenter.isLoading) {
       return Container(
         height: 24,
         width: 24,
@@ -151,36 +150,11 @@ class HomeState extends State<Home> {
                       color: Colors.redAccent,
                     ),
                     onPressed: () {
-                      removeWeather(weather);
+                      homePresenter.removeWeather(weather);
                     }),
               ),
             ],
           )),
     );
-  }
-
-  void getWeatherByName(String name) async {
-    setState(() {
-      isLoading = true;
-      this.weather = null;
-    });
-    Weather weather = await weatherRepo.getWeatherByLocation(name);
-    getWeathers();
-    setState(() {
-      isLoading = false;
-      this.weather = weather;
-    });
-  }
-
-  void getWeathers() async {
-    var weathers = await weatherRepo.getWeathers();
-    setState(() {
-      this.weathers = weathers;
-    });
-  }
-
-  void removeWeather(Weather weather) async {
-    await weatherRepo.removeWeather(weather);
-    getWeathers();
   }
 }
