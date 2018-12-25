@@ -14,7 +14,7 @@ class WeatherApi {
     var response;
     try {
       response = await client.get(url);
-    } on ClientException {
+    } on Exception {
       print("client exception");
       return null;
     }

@@ -17,6 +17,13 @@ class HomeState extends State<Home> {
   bool isLoading = false;
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getWeathers();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
@@ -37,6 +44,13 @@ class HomeState extends State<Home> {
               children: <Widget>[displayResult(), displayLoading()],
             ),
           ),
+          Container(
+            margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+            child: Text(
+              "history",
+              style: TextStyle(fontStyle: FontStyle.italic),
+            ),
+          )
         ],
       ),
     );
@@ -83,9 +97,15 @@ class HomeState extends State<Home> {
       this.weather = null;
     });
     Weather weather = await weatherRepo.getWeatherByLocation(name);
+    getWeathers();
     setState(() {
       isLoading = false;
       this.weather = weather;
     });
+  }
+
+  void getWeathers() async {
+    var weathers = await weatherRepo.getWeathers();
+    print("weathers size = ${weathers.length}");
   }
 }
