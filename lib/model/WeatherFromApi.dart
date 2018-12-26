@@ -23,7 +23,7 @@ class WeatherFromApi {
         id,
         name,
         weathers[0]?.main,
-        weathers[0]?.main,
+        weathers[0]?.description,
         main?.temp,
         main?.pressure,
         main?.humidity,
