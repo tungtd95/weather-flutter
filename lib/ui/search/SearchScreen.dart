@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:weather_flutter/ui/WeatherItem.dart';
 import 'package:weather_flutter/ui/search/SearchViewModel.dart';
+import 'package:weather_flutter/ui/weather/WeatherScreen.dart';
 
 class SearchScreen extends StatelessWidget with WidgetsBindingObserver {
   @override
@@ -32,7 +33,16 @@ class SearchScreen extends StatelessWidget with WidgetsBindingObserver {
               ? Container()
               : WeatherItem(
                   weather: model.weatherSearched,
-                  onClick: (weather) {},
+                  onClick: (weather) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return WeatherScreen(weather: weather);
+                        },
+                      ),
+                    );
+                  },
                   onFavorite: (weather) {
                     model.favorite();
                   },

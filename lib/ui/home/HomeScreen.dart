@@ -4,6 +4,7 @@ import 'package:weather_flutter/ui/WeatherItem.dart';
 import 'package:weather_flutter/ui/history/HistoryScreen.dart';
 import 'package:weather_flutter/ui/home/HomeViewModel.dart';
 import 'package:weather_flutter/ui/search/SearchScreen.dart';
+import 'package:weather_flutter/ui/weather/WeatherScreen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -73,10 +74,23 @@ class HomeScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               return WeatherItem(
                 weather: model.weatherFavorite[index],
-                onClick: (weather) {},
+                onClick: (weather) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return WeatherScreen(weather: weather);
+                      },
+                    ),
+                  );
+                },
                 onFavorite: (weather) {
                   model.updateFavorite(weather);
                 },
+                onDelete: (weather) {
+                  model.deleteWeather(weather);
+                },
+                deleteAble: true,
               );
             },
           );

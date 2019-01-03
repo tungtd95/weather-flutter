@@ -30,4 +30,9 @@ class HomeViewModel extends Model {
     await weatherRepo.saveWeather(weather);
     updateWeatherFavorite();
   }
+
+  void deleteWeather(Weather weather) async {
+    await weatherRepo.removeWeather(weather);
+    updateWeatherFavorite();
+  }
 }

@@ -3,6 +3,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:weather_flutter/model/Weather.dart';
 import 'package:weather_flutter/ui/WeatherItem.dart';
 import 'package:weather_flutter/ui/history/HistoryViewModel.dart';
+import 'package:weather_flutter/ui/weather/WeatherScreen.dart';
 
 class HistoryScreen extends StatelessWidget {
   @override
@@ -34,8 +35,21 @@ class HistoryScreen extends StatelessWidget {
               onFavorite: (Weather weather) {
                 model.updateFavorite(weather);
               },
-              onClick: (Weather weather) {},
+              onClick: (Weather weather) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return WeatherScreen(weather: weather);
+                    },
+                  ),
+                );
+              },
               weather: model.weathers[index],
+              onDelete: (Weather weather) {
+                model.deleteWeather(weather);
+              },
+              deleteAble: true,
             );
           },
         );

@@ -31,6 +31,11 @@ class HistoryViewModel extends Model {
     await weatherRepo.saveWeather(weather);
   }
 
+  void deleteWeather(Weather weather) async {
+    await weatherRepo.removeWeather(weather);
+    updateWeather();
+  }
+
   static void destroyInstance() {
     _instance = null;
   }
