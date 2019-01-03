@@ -9,4 +9,8 @@ abstract class WeatherRepo {
 
   Future<void> removeWeather(Weather weather);
 
+  Future<void> saveWeather(Weather weather);
+
+  Future<List<Weather>> getWeathersFavorite();
+
 }

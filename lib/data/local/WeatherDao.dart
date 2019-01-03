@@ -14,6 +14,7 @@ class WeatherDao {
   final String pressure = "pressure";
   final String humidity = "humidity";
   final String lastUpdated = "last_updated";
+  final String favorite = "favorite";
 
   Database database;
 
@@ -27,7 +28,8 @@ class WeatherDao {
         await db.execute(
             "CREATE TABLE IF NOT EXISTS $tableName ($id INTEGER PRIMARY KEY, "
             "$location TEXT, $main TEXT, $des TEXT, $temp REAL, $tempMax REAL,"
-            "$tempMin REAL, $pressure REAL, $humidity REAL, $lastUpdated INTEGER);");
+            "$tempMin REAL, $pressure REAL, $humidity REAL,"
+            " $lastUpdated INTEGER, $favorite INTEGER);");
       });
     }
     return database;
@@ -47,6 +49,7 @@ class WeatherDao {
     map[pressure] = weather.pressure;
     map[humidity] = weather.humidity;
     map[lastUpdated] = weather.lastUpdated;
+    map[favorite] = weather.favorite ? 1 : 0;
 
     var result = await db.insert(tableName, map,
         conflictAlgorithm: ConflictAlgorithm.replace);
@@ -78,6 +81,16 @@ class WeatherDao {
     return weathers;
   }
 
+  Future<List<Weather>> getWeathersFavorite() async {
+    Database db = await open();
+    List<Map<String, dynamic>> results = await db.query(tableName, where: "$favorite = 1");
+    List<Weather> weathers = [];
+    for (Map<String, dynamic> result in results) {
+      weathers.add(getWeatherFromRaw(result));
+    }
+    return weathers;
+  }
+
   Future<int> removeWeather(Weather weather) async {
     Database database = await open();
     int result = await database
@@ -96,6 +109,7 @@ class WeatherDao {
         result[humidity],
         result[tempMin],
         result[tempMax],
-        result[lastUpdated]);
+        result[lastUpdated],
+        favorite: result[favorite] == 1 ? true : false);
   }
 }
