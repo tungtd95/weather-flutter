@@ -62,6 +62,7 @@ class SearchScreen extends StatelessWidget with WidgetsBindingObserver {
                 children: <Widget>[
                   TextField(
                     style: TextStyle(fontSize: 18, color: Colors.black),
+                    autofocus: true,
                     decoration: InputDecoration(
                       border: InputBorder.none,
                       prefixIcon: Icon(Icons.search),
