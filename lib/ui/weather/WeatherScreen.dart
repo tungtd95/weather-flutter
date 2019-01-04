@@ -9,11 +9,17 @@ class WeatherScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "Detail",
+          style: TextStyle(),
+        ),
+      ),
       body: Hero(
         tag: "hero tag container ${weather.location}",
         child: Card(
           elevation: 3,
-          margin: EdgeInsets.fromLTRB(24, 44, 24, 16),
+          margin: EdgeInsets.fromLTRB(24, 16, 24, 24),
           child: ListView(
             children: <Widget>[
               Container(

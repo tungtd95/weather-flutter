@@ -11,6 +11,9 @@ class SearchScreen extends StatelessWidget with WidgetsBindingObserver {
       model: SearchViewModel.getInstance(),
       child: WillPopScope(
         child: Scaffold(
+          appBar: AppBar(
+            title: Text("Search weather"),
+          ),
           backgroundColor: Colors.white,
           body: Column(
             children: <Widget>[
@@ -53,7 +56,7 @@ class SearchScreen extends StatelessWidget with WidgetsBindingObserver {
   Widget searchWidget() => ScopedModelDescendant<SearchViewModel>(
         builder: (BuildContext context, Widget child, SearchViewModel model) {
           return Card(
-            margin: EdgeInsets.fromLTRB(16, 50, 16, 0),
+            margin: EdgeInsets.fromLTRB(16, 16, 16, 0),
             elevation: 5,
             child: Container(
               padding: EdgeInsets.only(top: 6, bottom: 4),
