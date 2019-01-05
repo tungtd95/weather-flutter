@@ -1,11 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:weather_flutter/model/Weather.dart';
+import 'package:weather_flutter/ui/weather/PagerIndicator.dart';
 
-class WeatherScreen extends StatelessWidget {
+class WeatherScreen extends StatefulWidget {
   final int initialIndex;
   final List<Weather> weathers;
 
   WeatherScreen(this.initialIndex, this.weathers);
+
+  @override
+  State<StatefulWidget> createState() {
+    return MState(initialIndex, weathers);
+  }
+}
+
+class MState extends State with TickerProviderStateMixin {
+  int initialIndex;
+  List<Weather> weathers;
+
+  MState(this.initialIndex, this.weathers);
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +29,25 @@ class WeatherScreen extends StatelessWidget {
           style: TextStyle(),
         ),
       ),
-      body: pageViewWidget(),
+      body: Stack(
+        alignment: Alignment.bottomCenter,
+        children: <Widget>[
+          pageViewWidget(),
+          Container(
+            margin: EdgeInsets.only(
+              bottom: 44,
+            ),
+            child: PagerIndicator(
+              itemCount: weathers.length,
+              indicatorNormalColor: Color.fromRGBO(230, 224, 211, 1),
+              indicatorSelectedColor: Color.fromRGBO(173, 151, 110, 1),
+              indicatorPadding: 6,
+              indicatorSize: 9,
+              currentSelected: initialIndex,
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -29,6 +60,11 @@ class WeatherScreen extends StatelessWidget {
       controller: PageController(
         initialPage: initialIndex,
       ),
+      onPageChanged: (currentPos) {
+        setState(() {
+          initialIndex = currentPos;
+        });
+      },
     );
   }
 
