@@ -40,7 +40,10 @@ class HistoryScreen extends StatelessWidget {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return WeatherScreen(weather: weather);
+                      return WeatherScreen(
+                        model.weathers.indexOf(weather),
+                        model.weathers,
+                      );
                     },
                   ),
                 );

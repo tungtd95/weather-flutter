@@ -41,7 +41,10 @@ class SearchScreen extends StatelessWidget with WidgetsBindingObserver {
                       context,
                       MaterialPageRoute(
                         builder: (context) {
-                          return WeatherScreen(weather: weather);
+                          return WeatherScreen(
+                            0,
+                            [weather],
+                          );
                         },
                       ),
                     );

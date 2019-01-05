@@ -79,7 +79,10 @@ class HomeScreen extends StatelessWidget {
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return WeatherScreen(weather: weather);
+                        return WeatherScreen(
+                          model.weatherFavorite.indexOf(weather),
+                          model.weatherFavorite,
+                        );
                       },
                     ),
                   );
