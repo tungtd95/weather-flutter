@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:weather_flutter/model/Weather.dart';
@@ -83,7 +85,8 @@ class WeatherDao {
 
   Future<List<Weather>> getWeathersFavorite() async {
     Database db = await open();
-    List<Map<String, dynamic>> results = await db.query(tableName, where: "$favorite = 1");
+    List<Map<String, dynamic>> results =
+        await db.query(tableName, where: "$favorite = 1");
     List<Weather> weathers = [];
     for (Map<String, dynamic> result in results) {
       weathers.add(getWeatherFromRaw(result));

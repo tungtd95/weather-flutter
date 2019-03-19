@@ -18,11 +18,11 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^0.1.2
-  http: ^0.12.0
-  sqflite: ^0.13.0+1
-  material_search: ^0.2.8
-  scoped_model: ^1.0.1
+  cupertino_icons:
+  http:
+  sqflite:
+  material_search:
+  scoped_model:
 
 dev_dependencies:
   flutter_test:

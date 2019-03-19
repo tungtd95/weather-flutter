@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:weather_flutter/data/local/WeatherDao.dart';
 import 'package:weather_flutter/data/remote/WeatherApi.dart';
 import 'package:weather_flutter/model/Weather.dart';
