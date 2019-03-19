@@ -1,39 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:scoped_model/scoped_model.dart';
 import 'package:weather_flutter/model/Weather.dart';
 import 'package:weather_flutter/ui/WeatherItem.dart';
-import 'package:weather_flutter/ui/history/HistoryViewModel.dart';
+import 'package:weather_flutter/ui/base/bloc_base.dart';
+import 'package:weather_flutter/ui/history/HistoryBloc.dart';
 import 'package:weather_flutter/ui/weather/WeatherScreen.dart';
 
 class HistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ScopedModel(
-      model: HistoryViewModel.getInstance(),
-      child: WillPopScope(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text("History"),
-          ),
-          body: weathersWidget(),
+    return WillPopScope(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text("History"),
         ),
-        onWillPop: () {
-          Navigator.pop(context, "pop from history screen");
-          HistoryViewModel.destroyInstance();
-        },
+        body: BlocProvider(
+          bloc: HistoryBloc(),
+          child: weathersWidget(context),
+        ),
       ),
+      onWillPop: () {
+        Navigator.pop(context, "pop from history screen");
+      },
     );
   }
 
-  Widget weathersWidget() {
-    return ScopedModelDescendant<HistoryViewModel>(
-      builder: (BuildContext context, Widget child, HistoryViewModel model) {
+  Widget weathersWidget(BuildContext context) {
+    HistoryBloc bloc = BlocProvider.of(context);
+    return StreamBuilder<List<Weather>>(
+      initialData: [],
+      stream: bloc.weathersStream,
+      builder: (BuildContext context, AsyncSnapshot<List<Weather>> snapshot) {
         return ListView.builder(
-          itemCount: model.weathers.length,
+          itemCount: snapshot.data.length,
           itemBuilder: (context, index) {
             return WeatherItem(
               onFavorite: (Weather weather) {
-                model.updateFavorite(weather);
+                bloc.updateFavorite(weather);
               },
               onClick: (Weather weather) {
                 Navigator.push(
@@ -41,16 +43,16 @@ class HistoryScreen extends StatelessWidget {
                   MaterialPageRoute(
                     builder: (context) {
                       return WeatherScreen(
-                        model.weathers.indexOf(weather),
-                        model.weathers,
+                        snapshot.data.indexOf(weather),
+                        snapshot.data,
                       );
                     },
                   ),
                 );
               },
-              weather: model.weathers[index],
+              weather: snapshot.data[index],
               onDelete: (Weather weather) {
-                model.deleteWeather(weather);
+                bloc.deleteWeather(weather);
               },
               deleteAble: true,
             );
